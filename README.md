@@ -23,6 +23,20 @@ To set up the required environment, follow these steps:
 
 Place your datasets in the `data/{dataset_name}/raw/` directory. Make sure to replace `{dataset_name}` with the appropriate name of your dataset.
 
+### The GeoLife dataset
+- Download `Geolife Trajectories 1.3.zip` from [GeoLife GPS Trajectory Dataset]([https://www.microsoft.com/en-us/research/publication/geolife-gps-trajectory-dataset-user-guide/](https://www.microsoft.com/en-us/download/details.aspx?id=52367))
+- Extract the compressed file to data/geo_life/raw/
+
+### The Taxi dataset
+- Download `Porto_taxi_data_test_partial_trajectories.csv` from [Taxi Service Trajectory - Prediction Challenge, ECML PKDD](https://data.world/uci/taxi-service-trajectory-prediction-challenge-ecml-pkdd)
+- Place the `Porto_taxi_data_test_partial_trajectories.csv` file in /data/taxi/raw/ and rename it as `data.csv`.
+
+### The Brinkhoff datasets (OldenBurg and San Joaquin)
+- Download the generator from [Network-based Generator of Moving Objects](https://iapg.jade-hs.de/personen/brinkhoff/generator)
+- Follow the instructions on the web page to generate moving objects using the Brinkhoff generator.
+- The generator will output a `.dat` file. Place the file in /data/{dataset_name/raw/ and rename it as `raw_trajectories.dat`.
+
+
 ## Running the Code
 
 To run the code with the provided demo evaluation, follow these steps:

@@ -21,10 +21,10 @@ To set up the required environment, follow these steps:
 
 ## Datasets
 
-Place your datasets in the `data/{dataset_name}/raw/` directory. Make sure to replace `{dataset_name}` with the appropriate name of your dataset.
+In general, place your downloaded/generated datasets in the `data/{dataset_name}/raw/`. Make sure to replace `{dataset_name}` with the appropriate name of your dataset.
 
 ### The GeoLife dataset
-- Download `Geolife Trajectories 1.3.zip` from [GeoLife GPS Trajectory Dataset]([https://www.microsoft.com/en-us/research/publication/geolife-gps-trajectory-dataset-user-guide/](https://www.microsoft.com/en-us/download/details.aspx?id=52367))
+- Download `Geolife Trajectories 1.3.zip` from [GeoLife GPS Trajectory Dataset](https://www.microsoft.com/en-us/download/details.aspx?id=52367)
 - Extract the compressed file to data/geo_life/raw/
 
 ### The Taxi dataset

@@ -36,7 +36,7 @@ trial_rep_count = 10
 sub_trial_rep_count = 200
 trajectory_count = 1
 
-exp_data = DataLoader.load_dp_data(dataset, epsilon = 0.1, method = 'pim', index = 0)
+exp_data = DataLoader.load_dp_data(dataset, epsilon = 0.9, method = 'pim', index = 0)
 
 print("Accuracy: ", Evaluation.evaluate_detection_accuracy(
                         data = exp_data,
@@ -55,3 +55,17 @@ print("Accuracy: ", Evaluation.evaluate_detection_accuracy(
                         p_estimate = fp_ratio,
                         debug = False,
                         parallel = False))
+
+# Experiment Name              | Expected Result  | Estimated Time
+# ------------------------Accuracy-----------------------------
+# Random Distortion            | 0.9995           | 27 seconds
+# Correlation Distortion       | 0.9990           | 25 seconds
+# Majority Collusion           | 1.0000           | 25 seconds
+# Probabilistic Collusion      | 0.9995           | 27 seconds
+# ------------------------Utility-----------------------------
+# Query Answering (Points)     | 9.6892           | 85 seconds
+# Query Answering (Patterns)   | 2.5377           | 19 seconds
+# Area Popularity              | 0.6213           | 8  seconds
+# Trip Error                   | 0.7484           | 8  seconds
+# Diameter Error               | 0.1346           | 8 seconds
+

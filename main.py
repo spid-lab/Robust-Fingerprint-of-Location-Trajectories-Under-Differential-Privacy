@@ -75,7 +75,7 @@ print(
     ),
 )
 
-# Experiment Name              | Expected Result  | Estimated Time
+# Experiment Name (GeoLife)    | Expected Result  | Estimated Time
 # ------------------------Accuracy-----------------------------
 # Random Distortion            | 0.9995           | 27 seconds
 # Correlation Distortion       | 0.9990           | 25 seconds

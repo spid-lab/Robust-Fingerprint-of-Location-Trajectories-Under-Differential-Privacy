@@ -5,9 +5,8 @@ from sampling import *
 
 
 class PrivacyMetric:
-
     @staticmethod
-    def pim(data, dataset, epsilon, delta_dp, correlation, copies=5):
+    def pim(data, dataset, epsilon, delta_dp, correlation, copies=1):
         """
         Apply the PIM algorithm to generate differentially private copies of the input data.
 
@@ -22,8 +21,13 @@ class PrivacyMetric:
         Returns:
             None
         """
+
         def apply_pim(trajectory, epsilon, delta_dp, correlation, length=100):
-            prev_x, prev_y, prev_t = int(trajectory[0][0]), int(trajectory[0][1]), trajectory[0][2]
+            prev_x, prev_y, prev_t = (
+                int(trajectory[0][0]),
+                int(trajectory[0][1]),
+                trajectory[0][2],
+            )
 
             posterior = np.zeros((Configuration.GRID_SIZE, Configuration.GRID_SIZE))
             posterior[prev_x][prev_y] = 1
@@ -31,7 +35,9 @@ class PrivacyMetric:
             prior = np.zeros((Configuration.GRID_SIZE, Configuration.GRID_SIZE))
             for x in range(Configuration.GRID_SIZE):
                 for y in range(Configuration.GRID_SIZE):
-                    for (tran_x, tran_y), tran_prob in correlation.get_transition((x, y)).items():
+                    for (tran_x, tran_y), tran_prob in correlation.get_transition(
+                        (x, y)
+                    ).items():
                         prior[tran_x, tran_y] += posterior[x, y] * tran_prob
 
             result = [(prev_x, prev_y, prev_t)]
@@ -61,17 +67,39 @@ class PrivacyMetric:
                 try:
                     c_hull = ConvexHull(points)
                 except Exception as err:
-                    points = [(x, y) for x, y in [(prev_x - Configuration.GRID_SIZE, prev_y - Configuration.GRID_SIZE), \
-                                                  (prev_x - Configuration.GRID_SIZE, prev_y + Configuration.GRID_SIZE), \
-                                                  (prev_x + Configuration.GRID_SIZE, prev_y - Configuration.GRID_SIZE), \
-                                                  (prev_x + Configuration.GRID_SIZE, prev_y + Configuration.GRID_SIZE)] if Coordinates.in_range_cell((x, y))]
+                    points = [
+                        (x, y)
+                        for x, y in [
+                            (
+                                prev_x - Configuration.GRID_SIZE,
+                                prev_y - Configuration.GRID_SIZE,
+                            ),
+                            (
+                                prev_x - Configuration.GRID_SIZE,
+                                prev_y + Configuration.GRID_SIZE,
+                            ),
+                            (
+                                prev_x + Configuration.GRID_SIZE,
+                                prev_y - Configuration.GRID_SIZE,
+                            ),
+                            (
+                                prev_x + Configuration.GRID_SIZE,
+                                prev_y + Configuration.GRID_SIZE,
+                            ),
+                        ]
+                        if Coordinates.in_range_cell((x, y))
+                    ]
                     points = np.array([(x, y) for x, y in points])
                     c_hull = ConvexHull(points)
 
-                c_vertices = [(points[vertex, 0], points[vertex, 1]) for vertex in c_hull.vertices]
+                c_vertices = [
+                    (points[vertex, 0], points[vertex, 1]) for vertex in c_hull.vertices
+                ]
 
                 if not Polygon(c_vertices).contains(Point(x_cell, y_cell)):
-                    x_cell, y_cell = Sampling.sample_closest((x_cell, y_cell), c_vertices)
+                    x_cell, y_cell = Sampling.sample_closest(
+                        (x_cell, y_cell), c_vertices
+                    )
 
                 vertex_set = {}
                 for x in c_vertices:
@@ -83,7 +111,10 @@ class PrivacyMetric:
 
                 s_hull = ConvexHull(s_points)
 
-                s_vertices = [(s_points[vertex, 0], s_points[vertex, 1]) for vertex in s_hull.vertices]
+                s_vertices = [
+                    (s_points[vertex, 0], s_points[vertex, 1])
+                    for vertex in s_hull.vertices
+                ]
                 p = Polygon(s_vertices)
 
                 t_value = None
@@ -104,12 +135,19 @@ class PrivacyMetric:
                     else:
                         break
 
-                normalized_vertices = [(x * t_value, y * t_value) for x, y in s_vertices]
+                normalized_vertices = [
+                    (x * t_value, y * t_value) for x, y in s_vertices
+                ]
 
                 while True:
-                    sampled_point = Sampling.sample_uniformly(Polygon(normalized_vertices))
+                    sampled_point = Sampling.sample_uniformly(
+                        Polygon(normalized_vertices)
+                    )
                     noise_r = random.gamma(3, epsilon ** (-1))
-                    final_x, final_y = x_cell + sampled_point[0] / t_value * noise_r, y_cell + sampled_point[1] / t_value * noise_r
+                    final_x, final_y = (
+                        x_cell + sampled_point[0] / t_value * noise_r,
+                        y_cell + sampled_point[1] / t_value * noise_r,
+                    )
                     if Coordinates.in_range_cell((final_x, final_y)):
                         break
                 final_x, final_y = int(final_x), int(final_y)
@@ -117,12 +155,15 @@ class PrivacyMetric:
                 # update posterior prob
                 posterior = np.zeros((Configuration.GRID_SIZE, Configuration.GRID_SIZE))
                 prob_from = np.ones((Configuration.GRID_SIZE, Configuration.GRID_SIZE))
-                prob_from *= epsilon ** 2 / 2 / s_hull.area
+                prob_from *= epsilon**2 / 2 / s_hull.area
                 sum_prob = 0
                 for x in range(Configuration.GRID_SIZE):
                     for y in range(Configuration.GRID_SIZE):
-                        prob_from[x, y] *= \
-                            math.e ** (-epsilon * t_value * math.sqrt((final_x - x) ** 2 + (final_y - y) ** 2))
+                        prob_from[x, y] *= math.e ** (
+                            -epsilon
+                            * t_value
+                            * math.sqrt((final_x - x) ** 2 + (final_y - y) ** 2)
+                        )
                         sum_prob += prior[x, y] * prob_from[x, y]
 
                 if sum_prob <= 0:
@@ -146,12 +187,21 @@ class PrivacyMetric:
             return result
 
         print("Generating dp copies using pim...")
-        out_path = Configuration.DP_DATA_PATH.format(dataset.value, 'pim')
+        out_path = Configuration.DP_DATA_PATH.format(dataset.value, "pim")
+        shutil.rmtree(out_path)
         Path(out_path).mkdir(parents=True, exist_ok=True)
 
         for index in tqdm(range(copies)):
-            dp_trajectories = Parallel(n_jobs=16, verbose=1)(delayed(apply_pim)(t, epsilon, delta_dp, correlation) for t in data)
-            with open(PurePath(Configuration.DP_DATA_PATH.format(dataset.value, 'pim'), "{}_{:.3f}_{}.dat".format(dataset.value, epsilon, index)), "w") as f:
+            dp_trajectories = Parallel(n_jobs=16, verbose=1)(
+                delayed(apply_pim)(t, epsilon, delta_dp, correlation) for t in data
+            )
+            with open(
+                PurePath(
+                    Configuration.DP_DATA_PATH.format(dataset.value, "pim"),
+                    "{}_{:.3f}_{}.dat".format(dataset.value, epsilon, index),
+                ),
+                "w",
+            ) as f:
                 json.dump(dp_trajectories, f)
 
         print("Generation OK.")

@@ -57,7 +57,9 @@ class TrajectoryUtil:
             return True
 
     @staticmethod
-    def filter_trajectory_in_length(trajectory, length_limit=Configuration.LENGTH_LIMIT):
+    def filter_trajectory_in_length(
+        trajectory, length_limit=Configuration.LENGTH_LIMIT
+    ):
         """
         Filters a trajectory based on its length.
 

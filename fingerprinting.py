@@ -4,7 +4,6 @@ from sampling import *
 
 
 class Fingerprinting:
-
     @staticmethod
     def probabilistic_fingerprint(trajectory, tau, p, theta, correlation, debug=False):
         """
@@ -52,7 +51,12 @@ class Fingerprinting:
         distribution = correlation.get_emission((x_cell, y_cell))
 
         # Sample from the emission probabilities
-        (sampled_lat, sampled_lng), fp_state = Sampling.sample_proportionally_with_truth(distribution, (x_cell, y_cell), p_current)
+        (
+            sampled_lat,
+            sampled_lng,
+        ), fp_state = Sampling.sample_proportionally_with_truth(
+            distribution, (x_cell, y_cell), p_current
+        )
         if debug:
             print("Sampled: ", sampled_lat, sampled_lng, "FP:", fp_state)
 
@@ -78,11 +82,27 @@ class Fingerprinting:
                 print("Prev:", prev_lat, prev_lng, "Truth: ", true_lat, true_lng)
 
             # Sample from the candidates
-            (sampled_lat, sampled_lng), fp_state = Sampling.sample_candidates((prev_lat, prev_lng), (true_lat, true_lng),
-                                                                              p_current, tau, correlation, replace=True, debug=False)
+            (sampled_lat, sampled_lng), fp_state = Sampling.sample_candidates(
+                (prev_lat, prev_lng),
+                (true_lat, true_lng),
+                p_current,
+                tau,
+                correlation,
+                replace=True,
+                debug=False,
+            )
 
             if debug:
-                print("Sampled: ", sampled_lat, sampled_lng, "FP:", fp_state, "(p =", p_current, ")")
+                print(
+                    "Sampled: ",
+                    sampled_lat,
+                    sampled_lng,
+                    "FP:",
+                    fp_state,
+                    "(p =",
+                    p_current,
+                    ")",
+                )
 
             # Store as the previous entry
             prev_lat, prev_lng, prev_time = sampled_lat, sampled_lng, true_time

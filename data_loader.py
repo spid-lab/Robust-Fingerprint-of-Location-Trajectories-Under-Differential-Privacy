@@ -23,8 +23,13 @@ class DataLoader:
         """
         print("Loading dp data...")
         Configuration.GPS_LIMIT = Configuration.GPS_LIMITS[dataset.value]
-        with open(PurePath(Configuration.DP_DATA_PATH.format(dataset.value, method),
-                           "{}_{:.3f}_{}.dat".format(dataset.value, epsilon, index)), "r") as f:
+        with open(
+            PurePath(
+                Configuration.DP_DATA_PATH.format(dataset.value, method),
+                "{}_{:.3f}_{}.dat".format(dataset.value, epsilon, index),
+            ),
+            "r",
+        ) as f:
             return json.load(f)
 
     @staticmethod
@@ -41,8 +46,13 @@ class DataLoader:
         """
         print("Loading correlation data...")
         Configuration.GPS_LIMIT = Configuration.GPS_LIMITS[dataset.value]
-        with open(PurePath(Configuration.CLEANSED_DATA_PATH.format(dataset.value),
-                           "correlation_trajectories_{}.dat".format(index)), "r") as f:
+        with open(
+            PurePath(
+                Configuration.CLEANSED_DATA_PATH.format(dataset.value),
+                "correlation_trajectories_{}.dat".format(index),
+            ),
+            "r",
+        ) as f:
             return json.load(f)
 
     @staticmethod
@@ -58,8 +68,13 @@ class DataLoader:
             dict: The loaded experimental data.
         """
         Configuration.GPS_LIMIT = Configuration.GPS_LIMITS[dataset.value]
-        with open(PurePath(Configuration.CLEANSED_DATA_PATH.format(dataset.value),
-                           "exp_trajectories_{}.dat".format(index)), "r") as f:
+        with open(
+            PurePath(
+                Configuration.CLEANSED_DATA_PATH.format(dataset.value),
+                "exp_trajectories_{}.dat".format(index),
+            ),
+            "r",
+        ) as f:
             return json.load(f)
 
     @staticmethod
@@ -74,6 +89,11 @@ class DataLoader:
             dict: The loaded extracted data.
         """
         Configuration.GPS_LIMIT = Configuration.GPS_LIMITS[dataset.value]
-        with open(Path(Configuration.EXTRACTED_DATA_PATH.format(dataset.value),
-                       "extracted_trajectories.dat"), "r") as f:
+        with open(
+            Path(
+                Configuration.EXTRACTED_DATA_PATH.format(dataset.value),
+                "extracted_trajectories.dat",
+            ),
+            "r",
+        ) as f:
             return json.load(f)

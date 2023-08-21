@@ -11,10 +11,10 @@ class Configuration:
     # Time interval in seconds for preprocessing.
 
     GPS_LIMITS = {
-        "geo_life": {'lat': (39.6, 40.1), 'lng': (116.0, 116.8)},
-        "taxi": {'lat': (-8.99, -7.00), 'lng':  (38.56, 42.10)},
-        "oldenburg": {'lat': (281.0, 23854.1), 'lng': (3935.0, 30851.1)},
-        "san_joaquin": {'lat': (3420584.0, 4077155.1), 'lng': (4725764.0, 5442669.1)}
+        "geo_life": {"lat": (39.6, 40.1), "lng": (116.0, 116.8)},
+        "taxi": {"lat": (-8.99, -7.00), "lng": (38.56, 42.10)},
+        "oldenburg": {"lat": (281.0, 23854.1), "lng": (3935.0, 30851.1)},
+        "san_joaquin": {"lat": (3420584.0, 4077155.1), "lng": (4725764.0, 5442669.1)},
     }
     # Latitude and longitude limits of each dataset.
 
@@ -22,7 +22,7 @@ class Configuration:
         "geo_life": list(range(500, 12000, 500)),
         "taxi": list(range(500, 4000, 500)),
         "oldenburg": list(range(500, 3500, 500)),
-        "san_joaquin": list(range(500, 3500, 500))
+        "san_joaquin": list(range(500, 3500, 500)),
     }
     # Trajectory lengths for preprocessing.
 
@@ -49,6 +49,6 @@ class Configuration:
 
     QUERY_REP_COUNT = 200
     # Number of repetitions for a query.
-    
+
     EVAL_GRID_SIZE = 10
     # Grid size for utility evaluation.

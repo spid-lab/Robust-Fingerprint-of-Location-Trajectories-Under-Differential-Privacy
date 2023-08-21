@@ -1,6 +1,7 @@
 from imports import *
 from configuration import *
 
+
 class Coordinates:
     """
     A utility class for working with geographical coordinates and grid cells.
@@ -18,8 +19,12 @@ class Coordinates:
             bool: True if the point is within the GPS limits, False otherwise.
         """
         x, y = point[0], point[1]
-        if Configuration.GPS_LIMIT['lat'][0] <= x < Configuration.GPS_LIMIT['lat'][1] and \
-                Configuration.GPS_LIMIT['lng'][0] <= y < Configuration.GPS_LIMIT['lng'][1]:
+        if (
+            Configuration.GPS_LIMIT["lat"][0] <= x < Configuration.GPS_LIMIT["lat"][1]
+            and Configuration.GPS_LIMIT["lng"][0]
+            <= y
+            < Configuration.GPS_LIMIT["lng"][1]
+        ):
             return True
 
     @staticmethod
@@ -52,10 +57,14 @@ class Coordinates:
 
         if not grid_size:
             grid_size = Configuration.GRID_SIZE
-        x_step = (Configuration.GPS_LIMIT['lat'][1] - Configuration.GPS_LIMIT['lat'][0]) / grid_size
-        y_step = (Configuration.GPS_LIMIT['lng'][1] - Configuration.GPS_LIMIT['lng'][0]) / grid_size
-        x_id = int((point[0] - Configuration.GPS_LIMIT['lat'][0]) / x_step)
-        y_id = int((point[1] - Configuration.GPS_LIMIT['lng'][0]) / y_step)
+        x_step = (
+            Configuration.GPS_LIMIT["lat"][1] - Configuration.GPS_LIMIT["lat"][0]
+        ) / grid_size
+        y_step = (
+            Configuration.GPS_LIMIT["lng"][1] - Configuration.GPS_LIMIT["lng"][0]
+        ) / grid_size
+        x_id = int((point[0] - Configuration.GPS_LIMIT["lat"][0]) / x_step)
+        y_id = int((point[1] - Configuration.GPS_LIMIT["lng"][0]) / y_step)
         return x_id, y_id
 
     @staticmethod
@@ -84,7 +93,12 @@ class Coordinates:
             list: A list of corner coordinates [(x1, y1), (x2, y2), (x3, y3), (x4, y4)].
         """
         x, y = cell[0], cell[1]
-        return [(x-0.5, y-0.5), (x-0.5, y+0.5), (x+0.5, y-0.5), (x+0.5, y+0.5)]
+        return [
+            (x - 0.5, y - 0.5),
+            (x - 0.5, y + 0.5),
+            (x + 0.5, y - 0.5),
+            (x + 0.5, y + 0.5),
+        ]
 
     @staticmethod
     def get_coordinate(cell):
@@ -99,10 +113,14 @@ class Coordinates:
         """
         assert Coordinates.in_range_cell(cell)
         x, y = cell[0], cell[1]
-        x_step = (Configuration.GPS_LIMIT['lat'][1] - Configuration.GPS_LIMIT['lat'][0]) / Configuration.GRID_SIZE
-        y_step = (Configuration.GPS_LIMIT['lng'][1] - Configuration.GPS_LIMIT['lng'][0]) / Configuration.GRID_SIZE
+        x_step = (
+            Configuration.GPS_LIMIT["lat"][1] - Configuration.GPS_LIMIT["lat"][0]
+        ) / Configuration.GRID_SIZE
+        y_step = (
+            Configuration.GPS_LIMIT["lng"][1] - Configuration.GPS_LIMIT["lng"][0]
+        ) / Configuration.GRID_SIZE
 
-        coordinate_x = Configuration.GPS_LIMIT['lat'][0] + x_step * x
-        coordinate_y = Configuration.GPS_LIMIT['lng'][0] + y_step * y
+        coordinate_x = Configuration.GPS_LIMIT["lat"][0] + x_step * x
+        coordinate_y = Configuration.GPS_LIMIT["lng"][0] + y_step * y
 
         return coordinate_x, coordinate_y

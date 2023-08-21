@@ -2,6 +2,7 @@ from imports import *
 from configuration import *
 import math
 
+
 class Distance:
     """
     A class for distance calculation.
@@ -49,7 +50,7 @@ class Distance:
         Returns:
             float: The Haversine distance.
         """
-        radius = 6372800 
+        radius = 6372800
         lat1, lng1 = coord1
         lat2, lng2 = coord2
 

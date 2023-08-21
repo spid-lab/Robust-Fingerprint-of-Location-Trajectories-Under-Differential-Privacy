@@ -29,7 +29,9 @@ class Detection:
                 suspects.append((leak_lat - cand_lat) ** 2 + (leak_lng - cand_lng) ** 2)
 
             min_value = min(suspects)
-            suspects = list(filter(lambda x: suspects[x] == min_value, range(len(suspects))))
+            suspects = list(
+                filter(lambda x: suspects[x] == min_value, range(len(suspects)))
+            )
 
             for suspect in suspects:
                 scores[suspect] += 1 / length

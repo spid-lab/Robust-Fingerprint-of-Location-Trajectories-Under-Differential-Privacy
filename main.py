@@ -7,24 +7,39 @@ from correlation import *
 from privacy_metric import *
 from evaluation import *
 
+warnings.filterwarnings(
+    action="ignore", category=UserWarning, module="multiprocessing.resource_tracker"
+)
+
 
 # Set dataset
-dataset = Dataset.GEO_LIFE
+dataset = Dataset.TAXI
 
-# Generate cleansed datasets from raw data (5 copies)
+# Extract dataset from raw file(s)
+DatasetUtil.extract_dataset(dataset)
+
+# # Generate cleansed datasets from extracted files (5 copies)
 DatasetUtil.generate_experimental_and_correlation_dataset(dataset)
 
-index = 0   # use the first copy
+index = 0  # use the first copy
 
 # # # Generate correlation model
-correlation_data = DataLoader.load_correlation_data(dataset, index)
-correlation_model = Correlation(correlation_data)
+correlation_model = Correlation(DataLoader.load_correlation_data(dataset, index))
 
 # Load data
 orig_data = DataLoader.load_experimental_data(dataset, index)
 
+# Select trajectories of interest
+selected_trajectory_data = orig_data[:10]
+
 # Apply pim
-PrivacyMetric.pim(orig_data[:100], dataset, epsilon=0.1, delta_dp=Configuration.DELTA_DP, correlation=correlation_model)
+PrivacyMetric.pim(
+    selected_trajectory_data,  #
+    dataset,
+    epsilon=0.9,
+    delta_dp=Configuration.DELTA_DP,
+    correlation=correlation_model,
+)
 
 # Examples - evaluation
 fp_ratio = 0.4
@@ -36,25 +51,29 @@ trial_rep_count = 10
 sub_trial_rep_count = 200
 trajectory_count = 1
 
-exp_data = DataLoader.load_dp_data(dataset, epsilon = 0.9, method = 'pim', index = 0)
+exp_data = DataLoader.load_dp_data(dataset, epsilon=0.9, method="pim", index=0)
 
-print("Accuracy: ", Evaluation.evaluate_detection_accuracy(
-                        data = exp_data,
-                        trial_rep_count = trial_rep_count,
-                        sub_trial_rep_count = sub_trial_rep_count,
-                        trajectory_count = trajectory_count,
-                        party_count = party_count,
-                        trajectory_length=trajectory_length,
-                        fp_ratio = fp_ratio,
-                        attack = Attack.correlation_attack,
-                        correlation_model = correlation_model,
-                        tau = Configuration.TAU,
-                        theta = Configuration.THETA,
-                        attack_ratio = attack_ratio,
-                        collusion_count = collusion_count,
-                        p_estimate = fp_ratio,
-                        debug = False,
-                        parallel = False))
+print(
+    "Accuracy: ",
+    Evaluation.evaluate_detection_accuracy(
+        data=exp_data,
+        trial_rep_count=trial_rep_count,
+        sub_trial_rep_count=sub_trial_rep_count,
+        trajectory_count=trajectory_count,
+        party_count=party_count,
+        trajectory_length=trajectory_length,
+        fp_ratio=fp_ratio,
+        attack=Attack.correlation_attack,
+        correlation_model=correlation_model,
+        tau=Configuration.TAU,
+        theta=Configuration.THETA,
+        attack_ratio=attack_ratio,
+        collusion_count=collusion_count,
+        p_estimate=fp_ratio,
+        debug=False,
+        parallel=False,
+    ),
+)
 
 # Experiment Name              | Expected Result  | Estimated Time
 # ------------------------Accuracy-----------------------------
@@ -68,4 +87,3 @@ print("Accuracy: ", Evaluation.evaluate_detection_accuracy(
 # Area Popularity              | 0.6213           | 8  seconds
 # Trip Error                   | 0.7484           | 8  seconds
 # Diameter Error               | 0.1346           | 8 seconds
-

@@ -11,9 +11,18 @@ warnings.filterwarnings(
     action="ignore", category=UserWarning, module="multiprocessing.resource_tracker"
 )
 
+fp_ratio = 0.4
+epsilon = 0.9
+collusion_count = 3
+attack_ratio = 0.8
+party_count = 100
+trajectory_length = 100
+trial_rep_count = 10
+sub_trial_rep_count = 200
+trajectory_count = 1
 
 # Set dataset
-dataset = Dataset.TAXI
+dataset = Dataset.SAN_JOAQUIN
 
 # Extract dataset from raw file(s)
 DatasetUtil.extract_dataset(dataset)
@@ -30,7 +39,7 @@ correlation_model = Correlation(DataLoader.load_correlation_data(dataset, index)
 orig_data = DataLoader.load_experimental_data(dataset, index)
 
 # Select trajectories of interest
-selected_trajectory_data = orig_data[:10]
+selected_trajectory_data = orig_data[:100]
 
 # Apply pim
 PrivacyMetric.pim(
@@ -41,18 +50,11 @@ PrivacyMetric.pim(
     correlation=correlation_model,
 )
 
-# Examples - evaluation
-fp_ratio = 0.4
-collusion_count = 3
-attack_ratio = 0.8
-party_count = 100
-trajectory_length = 100
-trial_rep_count = 10
-sub_trial_rep_count = 200
-trajectory_count = 1
 
+# Example 1 - detection accuracy evaluation
 exp_data = DataLoader.load_dp_data(dataset, epsilon=0.9, method="pim", index=0)
 
+attack_method = Attack.correlation_attack
 print(
     "Accuracy: ",
     Evaluation.evaluate_detection_accuracy(
@@ -63,7 +65,7 @@ print(
         party_count=party_count,
         trajectory_length=trajectory_length,
         fp_ratio=fp_ratio,
-        attack=Attack.correlation_attack,
+        attack=attack_method,
         correlation_model=correlation_model,
         tau=Configuration.TAU,
         theta=Configuration.THETA,
@@ -74,6 +76,23 @@ print(
         parallel=False,
     ),
 )
+
+# Example 2 - utility evaluation (toy example).
+utility_metric = EvaluationMetric.QA_POINTS
+print(
+    "Utility: ",
+    Evaluation.evaluate_utility(
+        orig_dataset=selected_trajectory_data,
+        dp_dataset=exp_data,
+        utility_metric=utility_metric,
+        fp_ratio=fp_ratio,
+        tau=Configuration.TAU,
+        theta=Configuration.THETA,
+        correlation=correlation_model,
+        debug=False,
+    ),
+)
+
 
 # Experiment Name (GeoLife)    | Expected Result  | Estimated Time
 # ------------------------Accuracy-----------------------------

@@ -46,9 +46,9 @@ To run the code with the provided demo evaluation, follow these steps:
 
 2. Run the following command: `python main.py`. It contains a evaluation demo as well.
 
-## Parameters in evaluation
+## Parameters in Evaluation
 
-### Detection accuracy
+### Detection Accuracy
 
 - `data`: The DP dataset to be evaluated. It should be loaded using `DataLoader.load_dp_data()`.
 - `trial_rep_count`: The number of FP datasets generated during evaluation.
@@ -67,7 +67,7 @@ To run the code with the provided demo evaluation, follow these steps:
 - `debug`: Debug flag. Set it to False.
 - `parallel`: Parallel flag that shows whether the evaluation will be executed using multiprocessing (very time and space consuming!).
 
-### Utility evaluation
+### Utility Evaluation
 - `orig_dataset`: The original dataset.
 - `dp_dataset`: The generated DP dataset (not fingerprinted yet).
 - `utility_metric`: The utility metric. Can be one of `EvaluationMetric.QA_POINTS`, `EvaluationMetric.QA_PATTERNS`, `EvaluationMetric.AREA_POPULARITY`, `EvaluationMetric.TRIP_ERROR`, `EvaluationMetric.DIAMETER_ERROR`, and `EvaluationMetric.TRIP_SIMILARITY`. Details can be found in the paper.

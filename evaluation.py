@@ -56,6 +56,27 @@ class Evaluation:
         grid_size=10,
         debug=False,
     ):
+        """
+        Evaluates the utility of the differential privacy (DP) dataset against the original dataset based on a specified utility metric.
+
+        Args:
+            orig_dataset (list): The original dataset.
+            dp_dataset (list): The protected dataset.
+            utility_metric (EvaluationMetric): The utility metric.
+            fp_ratio (float): The fingerprinting ratio.
+            tau (float): Correlation threshold.
+            theta (float): Balancing factor.
+            correlation (object): Correlation model.
+            grid_size (int, optional): Size of the grid over which some evaluation metrics are calculated. Defaults to 10.
+            debug (bool, optional): Debug flag.
+
+        Returns:
+            float: The result of the evaluation based on the specified utility metric.
+
+        Raises:
+            RuntimeError: If an invalid utility metric is provided.
+        """
+
         fp_dataset = Evaluation.generate_sample_dataset(
             dp_dataset, fp_ratio, tau, theta, correlation, debug=debug
         )

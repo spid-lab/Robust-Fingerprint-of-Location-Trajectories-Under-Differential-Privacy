@@ -21,7 +21,6 @@ class DatasetUtil:
         print("Extracting trajectories from raw data...")
         data_path = Configuration.RAW_DATA_PATH.format(dataset.value)
         out_path = Configuration.EXTRACTED_DATA_PATH.format(dataset.value)
-        shutil.rmtree(out_path)
 
         Configuration.GPS_LIMIT = Configuration.GPS_LIMITS[dataset.value]
 
@@ -134,7 +133,6 @@ class DatasetUtil:
         )
 
         out_path = Configuration.CLEANSED_DATA_PATH.format(dataset.value)
-        shutil.rmtree(out_path)
         Path(out_path).mkdir(parents=True, exist_ok=True)
 
         for index in tqdm(range(copies)):

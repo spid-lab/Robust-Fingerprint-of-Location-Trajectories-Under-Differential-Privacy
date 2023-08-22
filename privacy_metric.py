@@ -188,7 +188,6 @@ class PrivacyMetric:
 
         print("Generating dp copies using pim...")
         out_path = Configuration.DP_DATA_PATH.format(dataset.value, "pim")
-        shutil.rmtree(out_path)
         Path(out_path).mkdir(parents=True, exist_ok=True)
 
         for index in tqdm(range(copies)):
